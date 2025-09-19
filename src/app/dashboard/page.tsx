@@ -1,19 +1,17 @@
 "use client";
 
-import { Button } from "@mui/material";
-
 function DashboardPage() {
   return (
     <>
       <>Dashboard Page</>
 
-      <Button
+      <button
         onClick={() => {
           window.location.href = "/";
         }}
       >
         Log Out
-      </Button>
+      </button>
     </>
   );
 }
