@@ -18,7 +18,7 @@ export default function ButtonAppBar() {
         <Toolbar>
           <Image src={Logo} alt="Logo" width={30} height={30} />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: 1 }}>
-            Junction Boxers
+            Junction Sentinel
           </Typography>
           <Button component="a" color="inherit" href={loginUrl}>
             Login
