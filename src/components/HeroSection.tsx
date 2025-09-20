@@ -2,6 +2,7 @@
 
 import { Box, Button, Container, Typography } from "@mui/material";
 import landingBg from "../../public/landing_page_background.jpg";
+import { loginUrl } from "../app/utils/miscellaneous";
 
 export default function HeroSection() {
   return (
@@ -54,6 +55,7 @@ export default function HeroSection() {
           <Button
             variant="contained"
             color="inherit"
+            href={loginUrl}
             sx={{
               fontWeight: "bold",
               px: 3,
