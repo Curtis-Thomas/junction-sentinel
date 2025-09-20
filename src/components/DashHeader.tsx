@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import { IconButton, Tooltip, Stack } from "@mui/material";
+import { IconButton, Tooltip, Stack, Box } from "@mui/material";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -15,21 +15,62 @@ import LogoutIcon from "@mui/icons-material/Logout";
 function DashHeader() {
   return (
     <AppBar position="static" sx={{ bgcolor: "secondary.main" }}>
-      <Toolbar>
-        <Tooltip title="Go to Dashboard">
-          <IconButton href="/dashboard" sx={{ color: "primary.main" }}>
-            <Typography variant="h6" component="div">
-              Junction Sentinel
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+        {/* Left Section: Brand Name */}
+        <Box sx={{ flexGrow: 0 }}>
+          {/* Full brand name for medium and larger screens */}
+          <Button
+            href="/dashboard"
+            disableRipple
+            sx={{
+              display: { xs: "none", md: "flex" },
+              color: "primary.main",
+              background: "none",
+              boxShadow: "none",
+              fontWeight: 600,
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "transparent",
+                color: "text.primary",
+              },
+            }}
+          >
+            <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
+              JS
             </Typography>
-          </IconButton>
-        </Tooltip>
+          </Button>
+          {/* Abbreviated brand name for small screens */}
+          <Button
+            href="/dashboard"
+            disableRipple
+            sx={{
+              display: { xs: "flex", md: "none" },
+              color: "primary.main",
+              background: "none",
+              boxShadow: "none",
+              fontWeight: 600,
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "transparent",
+                color: "text.primary",
+              },
+            }}
+          >
+            <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
+              JS
+            </Typography>
+          </Button>
+        </Box>
+
+        {/* Center Section: Navigation Icons */}
         <Stack
           direction="row"
-          spacing={1}
+          spacing={{ xs: 0, sm: 1 }}
           sx={{
+            flexGrow: 1, // Allows the stack to grow and center its content
+            justifyContent: "center",
             color: "primary.main",
-            flexGrow: 1,
-            justifyContent: "flex-end",
+            alignItems: "center",
           }}
         >
           <Tooltip title="Dashboard">
@@ -48,38 +89,42 @@ function DashHeader() {
             </IconButton>
           </Tooltip>
         </Stack>
-        <Button
-          color="error"
-          variant="outlined"
-          startIcon={<LogoutIcon />}
-          sx={{
-            ml: 2,
-            borderColor: "error.main",
-            display: { xs: "none", md: "flex" },
-            "& .MuiButton-startIcon": {
-              mr: { xs: 0, md: 1 },
-            },
-          }}
-          href="/auth/logout"
-        >
-          Logout
-        </Button>
-        <Tooltip title="Logout">
-          <IconButton
-            color="error"
+
+        {/* Right Section: Logout Button */}
+        <Box sx={{ flexGrow: 0 }}>
+          {/* Full-size Logout button for medium and larger screens */}
+          <Button
+            variant="outlined"
+            startIcon={<LogoutIcon />}
             href="/auth/logout"
             sx={{
-              ml: 1,
-              display: { xs: "block", md: "none" },
+              display: { xs: "none", md: "flex" },
+              color: "error.main",
               borderColor: "error.main",
               "&:hover": {
-                backgroundColor: "rgba(161, 60, 77, 0.04)",
+                borderColor: "error.light",
+                color: "error.light",
               },
             }}
           >
-            <LogoutIcon />
-          </IconButton>
-        </Tooltip>
+            Logout
+          </Button>
+          {/* Icon-only Logout button for small screens */}
+          <Tooltip title="Logout">
+            <IconButton
+              color="error"
+              href="/auth/logout"
+              sx={{
+                display: { xs: "flex", md: "none" },
+                "&:hover": {
+                  backgroundColor: "rgba(161, 60, 77, 0.1)",
+                },
+              }}
+            >
+              <LogoutIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </Toolbar>
     </AppBar>
   );

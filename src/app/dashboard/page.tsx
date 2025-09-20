@@ -25,11 +25,11 @@ const junctionSentinelTheme = createTheme({
       main: "#0A1C29", // Guardian Blue
     },
     background: {
-      default: "#F2F2F2", // Data Grey
-      paper: "#F2F2F2", // Data Grey for Paper components
+      default: "#0A1C29", // Guardian Blue
+      paper: "#1A2B3D", // A slightly lighter blue for cards/paper
     },
     text: {
-      primary: "#0A1C29", // Guardian Blue for text
+      primary: "#F2F2F2", // Data Grey for text
       secondary: "#C59D5F", // Sentinel Gold for secondary text
     },
     error: {
@@ -39,7 +39,75 @@ const junctionSentinelTheme = createTheme({
   typography: {
     fontFamily: ["Roboto", "Arial", "sans-serif"].join(","),
     h4: {
-      color: "#0A1C29",
+      fontWeight: 600,
+      color: "#F2F2F2",
+    },
+    h6: {
+      color: "#C59D5F",
+    },
+    body1: {
+      color: "#F2F2F2",
+    },
+    body2: {
+      color: "#F2F2F2",
+    },
+  },
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#1A2B3D",
+          color: "#F2F2F2",
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "rgba(242, 242, 242, 0.5)",
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#C59D5F",
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#C59D5F",
+          },
+          color: "#F2F2F2",
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: "#F2F2F2",
+          "&.Mui-focused": {
+            color: "#C59D5F",
+          },
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        contained: {
+          backgroundColor: "#C59D5F",
+          color: "#0A1C29",
+          "&:hover": {
+            backgroundColor: "#B38C4D",
+          },
+        },
+      },
+    },
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "rgba(161, 60, 77, 0.15)",
+          color: "#F2F2F2",
+        },
+        icon: {
+          color: "#A13C4D !important",
+        },
+      },
     },
   },
 });
@@ -168,7 +236,8 @@ export default function ResponsiveDrawer() {
                   sx={{
                     p: 0.5,
                     borderRadius: 1,
-                    bgcolor: "#e8f5e9", // Lighter green for allowed
+                    bgcolor: "rgba(66, 165, 245, 0.2)", // Using a light blue for contrast
+                    color: "text.primary",
                   }}
                 >
                   <Typography variant="body2" sx={{ fontSize: "0.875rem" }}>
@@ -196,7 +265,8 @@ export default function ResponsiveDrawer() {
                   sx={{
                     p: 0.5,
                     borderRadius: 1,
-                    bgcolor: "#ffcdd2", // A more visible red for disallowed
+                    bgcolor: "rgba(161, 60, 77, 0.2)",
+                    color: "text.primary",
                   }}
                 >
                   <Typography
@@ -227,11 +297,10 @@ export default function ResponsiveDrawer() {
                 p: 3,
                 mb: 4,
                 minHeight: 150,
-                bgcolor: "background.paper",
                 borderRadius: 2,
                 overflow: "auto",
                 whiteSpace: "pre-wrap",
-                border: isError ? "2px solid #A13C4D" : "1px solid #ddd",
+                border: isError ? "2px solid #A13C4D" : "1px solid #1A2B3D",
                 transition: "0.3s",
                 height: "auto",
               }}
@@ -252,13 +321,6 @@ export default function ResponsiveDrawer() {
                 onKeyDown={handleInputKeyDown}
                 disabled={isLoading}
                 autoComplete="off"
-                sx={{
-                  "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                    { borderColor: "primary.main" },
-                  "& .MuiInputLabel-root.Mui-focused": {
-                    color: "primary.main",
-                  },
-                }}
               />
               <Button
                 variant="contained"
@@ -267,8 +329,6 @@ export default function ResponsiveDrawer() {
                 sx={{
                   width: 120,
                   height: 56,
-                  bgcolor: "primary.main",
-                  color: "secondary.main",
                 }}
               >
                 {isLoading ? (
