@@ -15,8 +15,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { TextField } from '@mui/material';
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 interface Props {
   /**
@@ -47,8 +48,8 @@ export default function ResponsiveDrawer(props: Props) {
   };
 
   const drawer = (
-    <div>
-      <Typography sx={{ px: 2, pt: 4, pb: 2, fontSize: 20, fontWeight: 600 }}>
+    <Box sx={{ bgcolor: '#0A1C29', color: '#f2f2f2', height: '100vh', px: 1 }}>
+      <Typography sx={{ pt: 5, px: 2, pb: 1, fontSize: 20, fontWeight: 600 }}>
         Junction Boxers
       </Typography>
       <Divider />
@@ -61,14 +62,14 @@ export default function ResponsiveDrawer(props: Props) {
           </ListItem>
         ))}
       </List>
-    </div>
+    </Box>
   );
 
   // Remove this const when copying and pasting into your project.
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex'  }}>
       <CssBaseline />
       <Box
         component="nav"
@@ -109,32 +110,9 @@ export default function ResponsiveDrawer(props: Props) {
         component="main"
         sx={{ flexGrow: 1, p: 4, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
       >
-        <Typography sx={{ marginBottom: 2 }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-          enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-          imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-          Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-          Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-          nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-          leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-          feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-          consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-          sapien faucibus et molestie ac.
-        </Typography>
-        <Typography sx={{ marginBottom: 2 }}>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-          eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-          neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-          tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-          sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-          tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-          gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-          et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-          tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
+        <TextField id="outlined-basic" fullWidth label="Input your data" variant="outlined" sx={{ w: '100%', mb: 3 }} />
+        <Typography variant='body1' sx={{ marginBottom: 2 }}>
+          Output: 
         </Typography>
       </Box>
     </Box>
