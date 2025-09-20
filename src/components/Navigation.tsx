@@ -5,7 +5,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Image from 'next/image';
-import Logo from "../../public/logo.png"
+import Logo from "../../public/logo.png";
+import { loginUrl } from "../app/utils/miscellaneous";
 
 export default function ButtonAppBar() {
   return (
@@ -16,7 +17,7 @@ export default function ButtonAppBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: 1 }}>
             Junction Boxers
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button component="a" color="inherit" href={loginUrl}>Login</Button>
         </Toolbar>
       </AppBar>
     </Box>
