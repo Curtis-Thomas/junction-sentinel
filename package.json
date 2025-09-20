@@ -9,12 +9,14 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.2",
+    "@mui/material": "^7.3.2",
     "@tailwindcss/postcss": "^4.1.13",
-    "daisyui": "^5.1.13",
     "next": "15.5.3",
     "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "tailwindcss": "^4.1.13"
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -1,19 +1,12 @@
 "use client";
 
-import { Button } from "@mui/material";
+import { HeroSection, Navigation } from "@/components";
 
 export default function Home() {
   return (
-    <>
-      <>Junction boxers</>
-
-      <Button
-        onClick={() => {
-          window.location.href = "/dashboard";
-        }}
-      >
-        Login
-      </Button>
-    </>
+    <main>
+      <Navigation />
+      <HeroSection />
+    </main>
   );
 }
