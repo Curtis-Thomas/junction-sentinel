@@ -16,14 +16,22 @@ function DashHeader() {
   return (
     <AppBar position="static" sx={{ bgcolor: "secondary.main" }}>
       <Toolbar>
-        <Typography
-          variant="h6"
-          component="div"
-          sx={{ flexGrow: 1, color: "primary.main" }}
+        <Tooltip title="Go to Dashboard">
+          <IconButton href="/dashboard" sx={{ color: "primary.main" }}>
+            <Typography variant="h6" component="div">
+              Junction Sentinel
+            </Typography>
+          </IconButton>
+        </Tooltip>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            color: "primary.main",
+            flexGrow: 1,
+            justifyContent: "flex-end",
+          }}
         >
-          Junction Sentinel
-        </Typography>
-        <Stack direction="row" spacing={1} sx={{ color: "primary.main" }}>
           <Tooltip title="Dashboard">
             <IconButton color="inherit" href="/dashboard">
               <DashboardIcon />
@@ -47,7 +55,6 @@ function DashHeader() {
           sx={{
             ml: 2,
             borderColor: "error.main",
-            // Hide text on small screens and show only the icon
             display: { xs: "none", md: "flex" },
             "& .MuiButton-startIcon": {
               mr: { xs: 0, md: 1 },
@@ -57,7 +64,6 @@ function DashHeader() {
         >
           Logout
         </Button>
-        {/* A version of the Logout button that only shows the icon on small screens */}
         <Tooltip title="Logout">
           <IconButton
             color="error"
