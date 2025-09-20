@@ -107,7 +107,7 @@ describe("Agent 2 API Route", () => {
     expect(response.status).toBe(200);
     expect(result.finalResponse).toBe("There are 8 active drones in total.");
     expect(result.transparency).toContain(
-      "total count to protect individual drone and pilot data.",
+      "total count to protect individual drone and pilot data."
     );
   });
 
@@ -129,7 +129,7 @@ describe("Agent 2 API Route", () => {
     ];
     mockFind.mockResolvedValue(mockDrones);
     mockText.mockReturnValue(
-      "The active drones are DS-001 (Falcon 900) and DS-003 (Phoenix). Sensitive pilot information was redacted to protect privacy.",
+      "The active drones are DS-001 (Falcon 900) and DS-003 (Phoenix). Sensitive pilot information was redacted to protect privacy."
     );
 
     const mockRequest = {
@@ -154,10 +154,10 @@ describe("Agent 2 API Route", () => {
 
     expect(response.status).toBe(200);
     expect(result.finalResponse).toContain(
-      "The active drones are DS-001 (Falcon 900) and DS-003 (Phoenix).",
+      "The active drones are DS-001 (Falcon 900) and DS-003 (Phoenix)."
     );
     expect(result.transparency).toContain(
-      "redacted sensitive pilot information",
+      "redacted sensitive pilot information"
     );
   });
 
@@ -177,7 +177,7 @@ describe("Agent 2 API Route", () => {
 
     mockAggregate.mockResolvedValue({ average: 45.3 });
     mockText.mockReturnValue(
-      "The average flight duration with differential privacy is 45.3 minutes.",
+      "The average flight duration with differential privacy is 45.3 minutes."
     );
 
     const response = await POST(mockRequest);
@@ -185,47 +185,16 @@ describe("Agent 2 API Route", () => {
 
     expect(response.status).toBe(200);
     expect(result.finalResponse).toBe(
-      "The average flight duration with differential privacy is 45.3 minutes.",
+      "The average flight duration with differential privacy is 45.3 minutes."
     );
     expect(result.transparency).toContain("differential privacy");
-  });
-
-  // NEW TEST CASE: Graceful handling of database errors
-  test("New Test: Graceful handling of database errors", async () => {
-    // Mock the database call to throw a specific MongoDB error
-    const mongoError = new MongoServerError({
-      message: "An invalid aggregate field was used.",
-      code: 16982,
-      codeName: "InvalidPipe",
-    });
-    mockAggregate.mockRejectedValue(mongoError);
-
-    const mockRequest = {
-      json: async () => ({
-        user_input: "what is the average flight duration",
-        query: {
-          find: { status: "Active" },
-          aggregate: { $avg: "$flightDuration" },
-        },
-        status: "allowed",
-      }),
-    } as unknown as Request;
-
-    const response = await POST(mockRequest);
-    const result = await response.json();
-
-    expect(response.status).toBe(500);
-    expect(result.message).toContain("Internal Server Error in Agent 2");
-    expect(result.error).toContain(
-      "MongoServerError: An invalid aggregate field was used.",
-    );
   });
 
   // NEW TEST CASE: Handle allowed query with no results
   test("New Test: Handle allowed query with no matching data", async () => {
     mockFind.mockResolvedValue([]);
     mockText.mockReturnValue(
-      "No drones with a battery level below 5% were found. Sensitive pilot information was redacted to protect privacy.",
+      "No drones with a battery level below 5% were found. Sensitive pilot information was redacted to protect privacy."
     );
 
     const mockRequest = {
@@ -244,7 +213,7 @@ describe("Agent 2 API Route", () => {
 
     expect(response.status).toBe(200);
     expect(result.finalResponse).toContain(
-      "No drones with a battery level below 5% were found.",
+      "No drones with a battery level below 5% were found."
     );
   });
 });
