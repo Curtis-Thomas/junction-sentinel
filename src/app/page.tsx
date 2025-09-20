@@ -1,14 +1,12 @@
 "use client";
-import { loginUrl } from "./utils/miscellaneous";
+
+import { HeroSection, Navigation } from "@/components";
 
 export default function Home() {
   return (
-    <>
-      <>Junction boxers</>
-
-      <a href={loginUrl}>
-        <button type="button">Login</button>
-      </a>
-    </>
+    <main>
+      <Navigation />
+      <HeroSection />
+    </main>
   );
 }
