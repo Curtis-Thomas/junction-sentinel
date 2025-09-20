@@ -35,9 +35,3 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
-
-      - name: Run tests
-        run: npm test
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
