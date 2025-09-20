@@ -107,7 +107,7 @@ describe("Agent 2 API Route", () => {
     expect(response.status).toBe(200);
     expect(result.finalResponse).toBe("There are 8 active drones in total.");
     expect(result.transparency).toContain(
-      "total count to protect individual drone and pilot data."
+      "total count to protect individual drone and pilot data.",
     );
   });
 
@@ -129,7 +129,7 @@ describe("Agent 2 API Route", () => {
     ];
     mockFind.mockResolvedValue(mockDrones);
     mockText.mockReturnValue(
-      "The active drones are DS-001 (Falcon 900) and DS-003 (Phoenix). Sensitive pilot information was redacted to protect privacy."
+      "The active drones are DS-001 (Falcon 900) and DS-003 (Phoenix). Sensitive pilot information was redacted to protect privacy.",
     );
 
     const mockRequest = {
@@ -154,10 +154,10 @@ describe("Agent 2 API Route", () => {
 
     expect(response.status).toBe(200);
     expect(result.finalResponse).toContain(
-      "The active drones are DS-001 (Falcon 900) and DS-003 (Phoenix)."
+      "The active drones are DS-001 (Falcon 900) and DS-003 (Phoenix).",
     );
     expect(result.transparency).toContain(
-      "redacted sensitive pilot information"
+      "redacted sensitive pilot information",
     );
   });
 
@@ -177,7 +177,7 @@ describe("Agent 2 API Route", () => {
 
     mockAggregate.mockResolvedValue({ average: 45.3 });
     mockText.mockReturnValue(
-      "The average flight duration with differential privacy is 45.3 minutes."
+      "The average flight duration with differential privacy is 45.3 minutes.",
     );
 
     const response = await POST(mockRequest);
@@ -185,7 +185,7 @@ describe("Agent 2 API Route", () => {
 
     expect(response.status).toBe(200);
     expect(result.finalResponse).toBe(
-      "The average flight duration with differential privacy is 45.3 minutes."
+      "The average flight duration with differential privacy is 45.3 minutes.",
     );
     expect(result.transparency).toContain("differential privacy");
   });
@@ -194,7 +194,7 @@ describe("Agent 2 API Route", () => {
   test("New Test: Handle allowed query with no matching data", async () => {
     mockFind.mockResolvedValue([]);
     mockText.mockReturnValue(
-      "No drones with a battery level below 5% were found. Sensitive pilot information was redacted to protect privacy."
+      "No drones with a battery level below 5% were found. Sensitive pilot information was redacted to protect privacy.",
     );
 
     const mockRequest = {
@@ -213,7 +213,7 @@ describe("Agent 2 API Route", () => {
 
     expect(response.status).toBe(200);
     expect(result.finalResponse).toContain(
-      "No drones with a battery level below 5% were found."
+      "No drones with a battery level below 5% were found.",
     );
   });
 });
