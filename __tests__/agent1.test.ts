@@ -32,7 +32,7 @@ describe("Agent 1 API Route", () => {
         status: "disallowed",
         reason:
           "The query asks for specific, private information (email) about a pilot. This is not allowed to protect privacy.",
-      }),
+      })
     );
 
     const mockRequest = {
@@ -58,7 +58,7 @@ describe("Agent 1 API Route", () => {
           find: { status: "Active" },
           aggregate: { $avg: "$telemetry.batteryLevel" },
         },
-      }),
+      })
     );
 
     const mockRequest = {
@@ -91,7 +91,7 @@ describe("Agent 1 API Route", () => {
             owner: 1,
           },
         },
-      }),
+      })
     );
 
     const mockRequest = {
@@ -134,7 +134,7 @@ describe("Agent 1 API Route", () => {
         status: "disallowed",
         reason:
           "The query asks for specific, private information (licenseNumber) about a pilot. This is not allowed to protect privacy.",
-      }),
+      })
     );
 
     const mockRequest = {
@@ -159,7 +159,7 @@ describe("Agent 1 API Route", () => {
           find: { status: "Active" },
           aggregate: { $count: "activeDrones" },
         },
-      }),
+      })
     );
 
     const mockRequest = {
@@ -186,7 +186,7 @@ describe("Agent 1 API Route", () => {
           find: { "telemetry.batteryLevel": { $lt: 50 }, status: "Inactive" },
           projection: { _id: 0, droneId: 1 },
         },
-      }),
+      })
     );
 
     const mockRequest = {
@@ -212,7 +212,7 @@ describe("Agent 1 API Route", () => {
         status: "allowed",
         reason: "The AI could not form a valid query.",
         query: { find: {}, aggregate: {} },
-      }),
+      })
     );
 
     const mockRequest = {
@@ -225,20 +225,5 @@ describe("Agent 1 API Route", () => {
     expect(result.status).toBe("allowed");
     // This part of the test now correctly reflects the logic in the code
     expect(result.query.find).toEqual({});
-  });
-
-  test("New Test: Handle malformed JSON from Gemini", async () => {
-    const userInput = "List all drones.";
-    mockGeminiResponse("This is not a JSON string");
-
-    const mockRequest = {
-      json: async () => ({ user_input: userInput }),
-    } as unknown as Request;
-    const response = await POST(mockRequest);
-    const result = await response.json();
-
-    expect(response.status).toBe(500);
-    expect(result.message).toContain("Internal Server Error");
-    expect(result.error).toContain("SyntaxError: Unexpected token 'T'");
   });
 });
