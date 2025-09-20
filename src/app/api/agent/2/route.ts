@@ -38,20 +38,23 @@ export async function POST(req: Request) {
 
     // Safety check: Ensure query is defined
     if (!query) {
-      console.error("Agent 2: No query provided. Request should be processed by Agent 1 first.");
+      console.error(
+        "Agent 2: No query provided. Request should be processed by Agent 1 first.",
+      );
       return NextResponse.json(
         {
           type: "error",
-          message: "No query provided. Please ensure the request is processed by Agent 1 first.",
+          message:
+            "No query provided. Please ensure the request is processed by Agent 1 first.",
         },
         { status: 400 },
       );
     }
 
     await client.connect();
-  const db = client.db("junction-boxers");
-  // Update to use drones collection for drone context
-  const dronesCollection = db.collection("drones");
+    const db = client.db("junction-boxers");
+    // Update to use drones collection for drone context
+    const dronesCollection = db.collection("drones");
 
     let retrievedData;
     let transparencyMessage = "";
@@ -70,7 +73,6 @@ export async function POST(req: Request) {
         // The result will be an object like { totalDrones: 8 }
         retrievedData = aggResult || { [countFieldName]: 0 };
         transparencyMessage = `The system returned a total count to protect individual drone and pilot data.`;
-
       } else if (query.aggregate["$avg"]) {
         console.log("Agent 2: Executing an average aggregation query.");
         const avgFieldName = String(query.aggregate["$avg"]).replace(/^\$/, "");
@@ -112,10 +114,12 @@ export async function POST(req: Request) {
         if (drone.model) sanitizedDrone.model = drone.model;
         if (drone.status) sanitizedDrone.status = drone.status;
         if (drone.location) sanitizedDrone.location = drone.location;
-        if (drone.altitudeMeters) sanitizedDrone.altitudeMeters = drone.altitudeMeters;
+        if (drone.altitudeMeters)
+          sanitizedDrone.altitudeMeters = drone.altitudeMeters;
         if (drone.speedMps) sanitizedDrone.speedMps = drone.speedMps;
         if (drone.owner) sanitizedDrone.owner = drone.owner;
-        if (drone.privacyLevel) sanitizedDrone.privacyLevel = drone.privacyLevel;
+        if (drone.privacyLevel)
+          sanitizedDrone.privacyLevel = drone.privacyLevel;
         return sanitizedDrone;
       });
     } else if (retrievedData && typeof retrievedData === "object") {
