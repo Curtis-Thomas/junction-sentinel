@@ -42,14 +42,15 @@ export async function POST(req: Request) {
       Here are the rules you must follow:
 
       1. **Strict PII Protection**: Treat the following as high-risk PII: "firstName", "lastName", "email", "licenseNumber", and "phone" (pilot/contact info).
-      2. **Disallowed Queries**: If the user's query directly asks for PII of a *specific pilot* or individual, you must set the "status" to "disallowed" and provide a clear "reason". For example: "What is Alex Chen's email?" or "Tell me the license number for pilot P-101."
-      3. **Allowed Queries**: If the query is safe, set the "status" to "allowed".
+      2. **Allowed Fields Only**: You may ONLY process queries related to these approved fields: ["droneId", "model", "status", "location", "altitudeMeters", "speedMps", "owner", "privacyLevel", "batteryLevel", "flightDuration", "purpose", "average", "count", "total", "active", "inactive"]
+      3. **Disallowed Queries**: If the user's query directly asks for PII of a *specific pilot* or individual, you must set the "status" to "disallowed" and provide a clear "reason". For example: "What is Alex Chen's email?" or "Tell me the license number for pilot P-101."
+      4. **Allowed Queries**: If the query is safe and relates to allowed fields, set the "status" to "allowed".
           a. **Aggregation Queries**: If the query can be answered with an aggregated value (e.g., average, count, sum), create an appropriate MongoDB aggregation query.
               * Use "$avg" for average queries (e.g., average battery level, average flight duration).
               * Use "$count" for count queries (e.g., number of active drones).
-          b. **Find Queries**: If the query is for non-sensitive, general information about a group of drones or pilots (e.g., "List all active drones in New York"), create a MongoDB find query.
+          b. **Find Queries**: If the query is for non-sensitive, general information about drones (e.g., "List all active drones"), create a MongoDB find query.
               * Always use a "projection" to exclude PII fields like "firstName", "lastName", "email", "licenseNumber", and "phone".
-              * Ensure the projection includes only non-sensitive fields. For example, "droneId", "model", "status", "location", "altitudeMeters", "speedMps", "owner", and "privacyLevel" are considered safe.
+              * Ensure the projection includes only non-sensitive fields from the allowed list.
       4. **JSON Format**: Your response MUST be a JSON object with the following structure:
           * \`status\`: "allowed" or "disallowed"
           * \`reason\`: A brief, human-readable explanation for your decision.
