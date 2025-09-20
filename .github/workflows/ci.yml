@@ -27,10 +27,7 @@ jobs:
         run: npm ci
 
       - name: Run build
-        run: npm run build
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        run: GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }} MONGODB_URI=${{ secrets.MONGODB_URI }} npm run build
 
       - name: Run tests
         run: npm test
