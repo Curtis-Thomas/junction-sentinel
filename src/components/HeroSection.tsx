@@ -35,15 +35,19 @@ export default function HeroSection() {
       />
 
       {/* Content */}
-      <Container sx={{ position: "relative", zIndex: 2, textAlign: 'center' }}>
+      <Container sx={{ position: "relative", zIndex: 2, textAlign: "center" }}>
         <Typography variant="h2" fontWeight="bold" gutterBottom>
           Junction Sentinel
         </Typography>
         <Typography variant="h5" gutterBottom sx={{ opacity: 0.8 }}>
           The Vigilant Guardian of Your Drone Fleet Data.
         </Typography>
-        <Typography variant="body1" sx={{ maxWidth: "650px", mx: "auto", mb: 3, opacity: 0.8 }}>
-          Absolute Data Integrity. Zero Information Leakage. Uncompromised Mission Readiness.
+        <Typography
+          variant="body1"
+          sx={{ maxWidth: "650px", mx: "auto", mb: 3, opacity: 0.8 }}
+        >
+          Absolute Data Integrity. Zero Information Leakage. Uncompromised
+          Mission Readiness.
         </Typography>
 
         <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
@@ -55,7 +59,7 @@ export default function HeroSection() {
               px: 3,
               borderRadius: 2,
               bgcolor: "#C59D5F",
-              color: "black"
+              color: "black",
             }}
           >
             Secure Your Data Now
