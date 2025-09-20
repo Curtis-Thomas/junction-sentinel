@@ -1,6 +1,6 @@
 // Main integration endpoint for agent workflow
 import { NextResponse } from 'next/server';
-import { MongoClient, ObjectId } from 'mongodb';
+import { MongoClient } from 'mongodb';
 
 // Define TypeScript interfaces
 interface AuditLog {
@@ -254,7 +254,7 @@ export async function POST(request: Request) {
       transparency: agent2Result.transparency,
       auditId,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Integration endpoint error:', error);
 
     // Safely log even when unexpected error occurs
@@ -266,8 +266,8 @@ export async function POST(request: Request) {
       startTime,
       endTime: new Date(),
       userInput, // now safe because captured earlier
-      queryStatus: 'error',
-      error: error.message || 'Unknown internal error',
+    queryStatus: 'error',
+      error: error instanceof Error ? error.message : String(error),
       processingTime: Date.now() - startTime.getTime(),
     });
 
