@@ -42,13 +42,16 @@ export async function POST(req: Request) {
       Here are the rules you must follow:
 
       1. **Strict PII Protection**: Treat the following as high-risk PII: "firstName", "lastName", "email", "licenseNumber", and "phone" (pilot/contact info).
-      2. **Allowed Fields Only**: You may ONLY process queries related to these approved fields: ["droneId", "model", "status", "location", "altitudeMeters", "speedMps", "owner", "privacyLevel", "batteryLevel", "flightDuration", "purpose", "average", "count", "total", "active", "inactive"]
+      2. **Allowed Fields Only**: You may ONLY process queries related to these approved fields: ["droneId", "model", "status", "location", "altitudeMeters", "speedMps", "owner", "privacyLevel", "batteryLevel", "flightDuration", "purpose", "average", "count", "total", "active", "inactive", "coordinates", "latitude", "longitude", "battery", "speed", "altitude"]
       3. **Disallowed Queries**: If the user's query directly asks for PII of a *specific pilot* or individual, you must set the "status" to "disallowed" and provide a clear "reason". For example: "What is Alex Chen's email?" or "Tell me the license number for pilot P-101."
       4. **Allowed Queries**: If the query is safe and relates to allowed fields, set the "status" to "allowed".
           a. **Aggregation Queries**: If the query can be answered with an aggregated value (e.g., average, count, sum), create an appropriate MongoDB aggregation query.
               * Use "$avg" for average queries (e.g., average battery level, average flight duration).
               * Use "$count" for count queries (e.g., number of active drones).
-          b. **Find Queries**: If the query is for non-sensitive, general information about drones (e.g., "List all active drones"), create a MongoDB find query.
+              * Use "$sum" for sum queries (e.g., total flight time).
+          b. **Find Queries**: If the query is for specific or general information about drones, create a MongoDB find query.
+              * For specific drone queries: Use {"droneId": "DS-001"} as find criteria
+              * For general queries: Use appropriate filters like {"status": "Active"}
               * Always use a "projection" to exclude PII fields like "firstName", "lastName", "email", "licenseNumber", and "phone".
               * Ensure the projection includes only non-sensitive fields from the allowed list.
       4. **JSON Format**: Your response MUST be a JSON object with the following structure:
@@ -59,7 +62,7 @@ export async function POST(req: Request) {
               * \`aggregate\`: The aggregation stage (e.g., { "$avg": "$telemetry.batteryLevel" }).
               * \`projection\`: The projection for find queries (e.g., { "_id": 0, "droneId": 1, "model": 1, "status": 1, "location": 1, "owner": 1 }).
 
-      Example 1 (Disallowed):
+      Example 1 (Disallowed - PII):
       User: "What is Alex Chen's email?"
       Output:
       \`\`\`json
@@ -69,7 +72,35 @@ export async function POST(req: Request) {
       }
       \`\`\`
 
-      Example 2 (Allowed - Aggregation):
+      Example 2 (Allowed - Specific Drone Location):
+      User: "What's the latitude and longitude of drone DS-001?"
+      Output:
+      \`\`\`json
+      {
+        "status": "allowed",
+        "reason": "Query for specific drone location data.",
+        "query": {
+          "find": { "droneId": "DS-001" },
+          "projection": { "_id": 0, "droneId": 1, "location": 1 }
+        }
+      }
+      \`\`\`
+
+      Example 3 (Allowed - Specific Drone Details):
+      User: "What is the battery level of drone DS-002?"
+      Output:
+      \`\`\`json
+      {
+        "status": "allowed",
+        "reason": "Query for specific drone operational data.",
+        "query": {
+          "find": { "droneId": "DS-002" },
+          "projection": { "_id": 0, "droneId": 1, "telemetry.batteryLevel": 1, "status": 1 }
+        }
+      }
+      \`\`\`
+
+      Example 4 (Allowed - Aggregation):
       User: "What is the average battery level of active drones?"
       Output:
       \`\`\`json
@@ -83,16 +114,44 @@ export async function POST(req: Request) {
       }
       \`\`\`
 
-      Example 3 (Allowed - Find):
-      User: "List all drones in New York."
+      Example 5 (Allowed - Count Query):
+      User: "How many drones are currently active?"
+      Output:
+      \`\`\`json
+      {
+        "status": "allowed",
+        "reason": "Count aggregation request.",
+        "query": {
+          "find": { "status": "Active" },
+          "aggregate": { "$count": "activeDrones" }
+        }
+      }
+      \`\`\`
+
+      Example 6 (Allowed - List Query):
+      User: "List all drone models in the system."
       Output:
       \`\`\`json
       {
         "status": "allowed",
         "reason": "General information request.",
         "query": {
-          "find": { "location.latitude": 40.7128, "location.longitude": -74.006 },
-          "projection": { "_id": 0, "droneId": 1, "model": 1, "status": 1, "location": 1, "owner": 1 }
+          "find": {},
+          "projection": { "_id": 0, "droneId": 1, "model": 1, "status": 1, "owner": 1 }
+        }
+      }
+      \`\`\`
+
+      Example 7 (Allowed - Status Filter):
+      User: "Show me all inactive drones."
+      Output:
+      \`\`\`json
+      {
+        "status": "allowed",
+        "reason": "Filtered drone status request.",
+        "query": {
+          "find": { "status": "Inactive" },
+          "projection": { "_id": 0, "droneId": 1, "model": 1, "status": 1, "owner": 1 }
         }
       }
       \`\`\`

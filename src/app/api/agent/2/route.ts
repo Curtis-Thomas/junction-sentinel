@@ -53,8 +53,8 @@ export async function POST(req: Request) {
 
     await client.connect();
     const db = client.db("junction-boxers");
-    // Update to use drones collection for drone context
-    const dronesCollection = db.collection("drones");
+    // Update to use drone-data collection to match setup script
+    const dronesCollection = db.collection("drone-data");
 
     let retrievedData;
     let transparencyMessage = "";

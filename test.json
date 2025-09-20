@@ -1,0 +1,332 @@
+[
+  {
+    "_id": {
+      "$oid": "65163625f3851b32d3a3c26a"
+    },
+    "droneId": "DS-001",
+    "model": "Falcon 900",
+    "status": "Active",
+    "location": {
+      "latitude": 40.7128,
+      "longitude": -74.006,
+      "lastUpdated": {
+        "$date": "2025-09-19T10:00:00Z"
+      }
+    },
+    "pilot": {
+      "pilotId": "P-101",
+      "firstName": "Alex",
+      "lastName": "Chen",
+      "licenseNumber": "LN-987654321",
+      "contact": {
+        "email": "alex.chen@example.com",
+        "phone": "+1-202-555-0145"
+      }
+    },
+    "flightHistory": [
+      {
+        "flightId": "F-501",
+        "date": {
+          "$date": "2025-09-18T14:30:00Z"
+        },
+        "durationMinutes": 45,
+        "purpose": "Surveillance",
+        "payload": "High-res Camera"
+      }
+    ],
+    "telemetry": {
+      "batteryLevel": 85,
+      "altitudeMeters": 150,
+      "speedMps": 20
+    },
+    "maintenance": {
+      "lastServiceDate": {
+        "$date": "2025-09-10T00:00:00Z"
+      },
+      "nextServiceDate": {
+        "$date": "2025-10-10T00:00:00Z"
+      },
+      "serviceLog": "Routine check completed, propellors replaced."
+    },
+    "dataCollected": {
+      "type": "Surveillance Imagery",
+      "metadata": {
+        "captureDate": {
+          "$date": "2025-09-19T09:55:00Z"
+        },
+        "location": {
+          "latitude": 40.713,
+          "longitude": -74.0062
+        },
+        "tags": ["traffic", "cityscape"]
+      },
+      "storageReference": "s3://junction-sentinel-data/DS-001/images/20250919.zip"
+    },
+    "owner": "Junction Sentinel Corp.",
+    "privacyLevel": "High"
+  },
+  {
+    "_id": {
+      "$oid": "65163625f3851b32d3a3c26b"
+    },
+    "droneId": "DS-002",
+    "model": "Hover Guardian",
+    "status": "Inactive",
+    "location": {
+      "latitude": 34.0522,
+      "longitude": -118.2437,
+      "lastUpdated": {
+        "$date": "2025-09-18T18:00:00Z"
+      }
+    },
+    "pilot": {
+      "pilotId": "P-102",
+      "firstName": "Sarah",
+      "lastName": "Lee",
+      "licenseNumber": "LN-112233445",
+      "contact": {
+        "email": "sarah.lee@example.com",
+        "phone": "+1-310-555-0199"
+      }
+    },
+    "flightHistory": [
+      {
+        "flightId": "F-502",
+        "date": {
+          "$date": "2025-09-17T11:00:00Z"
+        },
+        "durationMinutes": 60,
+        "purpose": "Delivery",
+        "payload": "Medical Supplies"
+      }
+    ],
+    "telemetry": {
+      "batteryLevel": 40,
+      "altitudeMeters": 0,
+      "speedMps": 0
+    },
+    "maintenance": {
+      "lastServiceDate": {
+        "$date": "2025-08-25T00:00:00Z"
+      },
+      "nextServiceDate": {
+        "$date": "2025-09-25T00:00:00Z"
+      },
+      "serviceLog": "Scheduled maintenance, awaiting parts."
+    },
+    "dataCollected": {
+      "type": "Delivery Log",
+      "metadata": {
+        "captureDate": {
+          "$date": "2025-09-17T11:59:00Z"
+        },
+        "location": {
+          "latitude": 34.053,
+          "longitude": -118.244
+        },
+        "tags": ["delivery", "medical"]
+      },
+      "storageReference": "s3://junction-sentinel-data/DS-002/logs/delivery_20250917.json"
+    },
+    "owner": "Junction Sentinel Corp.",
+    "privacyLevel": "Medium"
+  },
+  {
+    "_id": {
+      "$oid": "65163625f3851b32d3a3c26c"
+    },
+    "droneId": "DS-003",
+    "model": "Sky Surveyor",
+    "status": "Active",
+    "location": {
+      "latitude": 51.5074,
+      "longitude": -0.1278,
+      "lastUpdated": {
+        "$date": "2025-09-19T09:30:00Z"
+      }
+    },
+    "pilot": {
+      "pilotId": "P-103",
+      "firstName": "David",
+      "lastName": "Wilson",
+      "licenseNumber": "LN-556677889",
+      "contact": {
+        "email": "david.wilson@example.com",
+        "phone": "+44-20-7946-0156"
+      }
+    },
+    "flightHistory": [
+      {
+        "flightId": "F-503",
+        "date": {
+          "$date": "2025-09-19T09:00:00Z"
+        },
+        "durationMinutes": 30,
+        "purpose": "Environmental Survey",
+        "payload": "Air Quality Sensor"
+      }
+    ],
+    "telemetry": {
+      "batteryLevel": 90,
+      "altitudeMeters": 100,
+      "speedMps": 15
+    },
+    "maintenance": {
+      "lastServiceDate": {
+        "$date": "2025-09-15T00:00:00Z"
+      },
+      "nextServiceDate": {
+        "$date": "2025-10-15T00:00:00Z"
+      },
+      "serviceLog": "Sensor calibration completed."
+    },
+    "dataCollected": {
+      "type": "Sensor Readings",
+      "metadata": {
+        "captureDate": {
+          "$date": "2025-09-19T09:25:00Z"
+        },
+        "location": {
+          "latitude": 51.5075,
+          "longitude": -0.1279
+        },
+        "tags": ["environmental", "air_quality"]
+      },
+      "storageReference": "s3://junction-sentinel-data/DS-003/readings/20250919.csv"
+    },
+    "owner": "Junction Sentinel Corp.",
+    "privacyLevel": "Low"
+  },
+  {
+    "_id": {
+      "$oid": "65163625f3851b32d3a3c26d"
+    },
+    "droneId": "DS-004",
+    "model": "Shadow",
+    "status": "Active",
+    "location": {
+      "latitude": 37.7749,
+      "longitude": -122.4194,
+      "lastUpdated": {
+        "$date": "2025-09-19T08:00:00Z"
+      }
+    },
+    "pilot": {
+      "pilotId": "P-104",
+      "firstName": "Emily",
+      "lastName": "Brown",
+      "licenseNumber": "LN-998877665",
+      "contact": {
+        "email": "emily.brown@example.com",
+        "phone": "+1-415-555-0123"
+      }
+    },
+    "flightHistory": [
+      {
+        "flightId": "F-504",
+        "date": {
+          "$date": "2025-09-19T07:30:00Z"
+        },
+        "durationMinutes": 55,
+        "purpose": "Search and Rescue",
+        "payload": "Thermal Camera"
+      }
+    ],
+    "telemetry": {
+      "batteryLevel": 75,
+      "altitudeMeters": 120,
+      "speedMps": 18
+    },
+    "maintenance": {
+      "lastServiceDate": {
+        "$date": "2025-09-01T00:00:00Z"
+      },
+      "nextServiceDate": {
+        "$date": "2025-10-01T00:00:00Z"
+      },
+      "serviceLog": "Propellor balancing and firmware update."
+    },
+    "dataCollected": {
+      "type": "Thermal Imagery",
+      "metadata": {
+        "captureDate": {
+          "$date": "2025-09-19T07:50:00Z"
+        },
+        "location": {
+          "latitude": 37.775,
+          "longitude": -122.4195
+        },
+        "tags": ["search_and_rescue", "thermal"]
+      },
+      "storageReference": "s3://junction-sentinel-data/DS-004/thermal_images/20250919.tar.gz"
+    },
+    "owner": "Junction Sentinel Corp.",
+    "privacyLevel": "High"
+  },
+  {
+    "_id": {
+      "$oid": "65163625f3851b32d3a3c26e"
+    },
+    "droneId": "DS-005",
+    "model": "Agri-Bot",
+    "status": "Inactive",
+    "location": {
+      "latitude": 39.8283,
+      "longitude": -98.5795,
+      "lastUpdated": {
+        "$date": "2025-09-17T16:00:00Z"
+      }
+    },
+    "pilot": {
+      "pilotId": "P-105",
+      "firstName": "Mike",
+      "lastName": "Jones",
+      "licenseNumber": "LN-223344556",
+      "contact": {
+        "email": "mike.jones@example.com",
+        "phone": "+1-913-555-0188"
+      }
+    },
+    "flightHistory": [
+      {
+        "flightId": "F-505",
+        "date": {
+          "$date": "2025-09-17T15:00:00Z"
+        },
+        "durationMinutes": 90,
+        "purpose": "Crop Health Analysis",
+        "payload": "Multispectral Camera"
+      }
+    ],
+    "telemetry": {
+      "batteryLevel": 30,
+      "altitudeMeters": 0,
+      "speedMps": 0
+    },
+    "maintenance": {
+      "lastServiceDate": {
+        "$date": "2025-08-30T00:00:00Z"
+      },
+      "nextServiceDate": {
+        "$date": "2025-09-30T00:00:00Z"
+      },
+      "serviceLog": "Pre-flight check and payload inspection."
+    },
+    "dataCollected": {
+      "type": "Multispectral Data",
+      "metadata": {
+        "captureDate": {
+          "$date": "2025-09-17T15:45:00Z"
+        },
+        "location": {
+          "latitude": 39.8285,
+          "longitude": -98.5796
+        },
+        "tags": ["agriculture", "multispectral"]
+      },
+      "storageReference": "s3://junction-sentinel-data/DS-005/multispectral/20250917.json"
+    },
+    "owner": "Junction Sentinel Corp.",
+    "privacyLevel": "Low"
+  }
+]
