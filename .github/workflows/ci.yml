@@ -29,11 +29,11 @@ jobs:
       - name: Run build
         run: npm run build
         env:
-          GEMINI_API_KEY: ${{ env.GEMINI_API_KEY }}
-          MONGODB_URI: ${{ env.MONGODB_URI }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
       - name: Run tests
         run: npm test
         env:
-          GEMINI_API_KEY: ${{ env.GEMINI_API_KEY }}
-          MONGODB_URI: ${{ env.MONGODB_URI }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
