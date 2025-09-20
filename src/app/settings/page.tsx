@@ -12,7 +12,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import DashHeader from "@/components/DashHeader";
 
-// Define the brand theme
+// Define the Junction Sentinel brand theme
 const junctionSentinelTheme = createTheme({
   palette: {
     primary: {
@@ -22,11 +22,12 @@ const junctionSentinelTheme = createTheme({
       main: "#0A1C29", // Guardian Blue
     },
     background: {
-      default: "#F2F2F2", // Data Grey
+      default: "#0A1C29", // Guardian Blue
+      paper: "#1A2B3D", // A slightly lighter blue for cards/paper
     },
     text: {
-      primary: "#0A1C29", // Guardian Blue for text
-      secondary: "#C59D5F", // Sentinel Gold for secondary text
+      primary: "#F2F2F2", // Data Grey for text
+      secondary: "#C59D5F", // Sentinel Gold for highlights
     },
     error: {
       main: "#A13C4D", // Alert Red
@@ -34,6 +35,74 @@ const junctionSentinelTheme = createTheme({
   },
   typography: {
     fontFamily: ["Roboto", "Arial", "sans-serif"].join(","),
+    h4: {
+      fontWeight: 600,
+    },
+  },
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#1A2B3D",
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "rgba(242, 242, 242, 0.5)",
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#C59D5F",
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#C59D5F",
+          },
+          color: "#F2F2F2",
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: "#F2F2F2",
+          "&.Mui-focused": {
+            color: "#C59D5F",
+          },
+        },
+      },
+    },
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "rgba(161, 60, 77, 0.15)",
+          color: "#F2F2F2",
+        },
+        icon: {
+          color: "#A13C4D !important",
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        outlined: {
+          color: "#A13C4D",
+          borderColor: "#A13C4D",
+          "&:hover": {
+            backgroundColor: "rgba(161, 60, 77, 0.04)",
+            borderColor: "#A13C4D",
+          },
+        },
+        contained: {
+          backgroundColor: "#C59D5F",
+          color: "#0A1C29",
+          "&:hover": {
+            backgroundColor: "#B38C4D",
+          },
+        },
+      },
+    },
   },
 });
 
@@ -57,16 +126,22 @@ function SettingsPage() {
   }>({ type: null, message: null });
 
   React.useEffect(() => {
+    // Mock API call
     const fetchSettings = async () => {
+      // Simulate network delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       try {
-        const response = await fetch("/api/user/settings");
-        if (!response.ok) {
-          throw new Error("Failed to fetch settings.");
-        }
-        const data = await response.json();
-        setHighRiskPII(data.highRiskPII.join(", "));
-        setAllowedFields(data.allowedFields.join(", "));
-        setDisallowedQueries(data.disallowedQueries.join(", "));
+        // In a real app, this would be an actual fetch call
+        const responseData = {
+          highRiskPII: ["firstName", "lastName", "email", "phone"],
+          allowedFields: ["droneId", "model", "status", "location", "battery"],
+          disallowedQueries: ["show me all", "what is..."],
+        };
+
+        setHighRiskPII(responseData.highRiskPII.join(", "));
+        setAllowedFields(responseData.allowedFields.join(", "));
+        setDisallowedQueries(responseData.disallowedQueries.join(", "));
+        setAlert({ type: null, message: null });
       } catch (error) {
         console.error("Error fetching settings:", error);
         setAlert({
@@ -96,13 +171,10 @@ function SettingsPage() {
     setAlert({ type: null, message: null });
 
     try {
-      const response = await fetch("/api/user/settings", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(settingsToSave),
-      });
-
-      if (!response.ok) {
+      // Mock API call
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const success = true; // Simulate a successful save
+      if (!success) {
         throw new Error("Failed to save settings.");
       }
 
@@ -135,7 +207,7 @@ function SettingsPage() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          minHeight: "100vh",
+          minHeight: "101vh",
           bgcolor: "background.default",
         }}
       >
@@ -186,7 +258,7 @@ function SettingsPage() {
 
             {isPageLoading ? (
               <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
-                <CircularProgress />
+                <CircularProgress sx={{ color: "primary.main" }} />
               </Box>
             ) : (
               <>
@@ -239,11 +311,6 @@ function SettingsPage() {
                     sx={{
                       flexGrow: 1,
                       height: 56,
-                      borderColor: "error.main",
-                      color: "error.main",
-                      "&:hover": {
-                        backgroundColor: "rgba(161, 60, 77, 0.04)",
-                      },
                     }}
                   >
                     Reset to Default
@@ -262,8 +329,6 @@ function SettingsPage() {
                     sx={{
                       flexGrow: 1,
                       height: 56,
-                      bgcolor: "primary.main",
-                      color: "secondary.main",
                     }}
                   >
                     {isLoading ? (

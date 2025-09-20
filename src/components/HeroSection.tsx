@@ -66,19 +66,6 @@ export default function HeroSection() {
           >
             Secure Your Data Now
           </Button>
-          <Button
-            variant="outlined"
-            color="inherit"
-            sx={{
-              fontWeight: "bold",
-              px: 3,
-              borderRadius: 2,
-              borderColor: "#fff",
-              color: "#fff",
-            }}
-          >
-            Watch Demo
-          </Button>
         </Box>
       </Container>
     </Box>
