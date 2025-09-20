@@ -12,7 +12,7 @@ export default function Agent1Page() {
   return (
     <Box>
       <Typography variant="h4" gutterBottom sx={{ mb: 4, fontWeight: 600 }}>
-        Agent 1
+        Agent 2
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 3 }}>
         <form onSubmit={handleSearch}>
