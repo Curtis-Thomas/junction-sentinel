@@ -97,6 +97,37 @@ PATCH /api/userSetting    → Update user settings
 - **Privacy-by-Design**: Compliance and data protection built into every step.
 - **Auditability**: Complete records of data access and transformations.
 - **Ease of Use**: Natural language queries automatically processed within privacy guardrails.
+- **Dynamic Prompt Injection**: User-customizable privacy settings that adapt AI prompts in real-time.
+
+Each authenticated user can configure three key privacy parameters:
+
+#### 1. High-Risk PII Categories (`highRiskPII`)
+Defines what constitutes personally identifiable information that should be protected:
+
+#### 2. Allowed Data Fields (`allowedFields`)
+Specifies which drone data fields can be accessed in queries:
+
+#### 3. Allowed Query Types (`isAllowedQueries`)
+Defines the types of queries that are permitted:
+
+
+### Dynamic Prompt Generation
+
+When a user submits a query, the system:
+
+1. **Retrieves User Settings** from the database using Auth0 user ID
+2. **Injects Settings into AI Prompts** dynamically modifying the privacy rules
+3. **Processes Query** with personalized security constraints
+4. **Returns Response** that respects the user's privacy preferences
+
+### Security Benefits
+
+1. **Personalized Privacy**: Each user gets tailored privacy protection
+2. **Real-time Adaptation**: Settings can be updated without system restart
+3. **Audit Trail**: All setting changes are logged for compliance
+4. **Granular Control**: Fine-grained control over data access
+5. **Dynamic Enforcement**: AI prompts adapt immediately to new settings
+---
 
 ## Quickstart Guide
 
