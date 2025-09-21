@@ -31,10 +31,7 @@ export async function GET() {
     // Get Auth0 session
     const session = await auth0.getSession();
     if (!session || !session.user?.sub) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const userId = session.user.sub as string;
@@ -51,23 +48,47 @@ export async function GET() {
       // Return default settings if none exist
       const defaultSettings: UserSettings = {
         userId,
-        highRiskPII: ["pilot_name","Licence_number", "Address", "credit_card", "bank_account", "passport"],
-        allowedFields: ["droneId", "model", "status", "location", "altitudeMeters", "speedMps", "owner", "privacyLevel", "batteryLevel", "flightDuration", "purpose"],
-        isAllowedQueries: ["drone status", "active drones", "battery level", "location", "flight duration"],
+        highRiskPII: [
+          "pilot_name",
+          "Licence_number",
+          "Address",
+          "credit_card",
+          "bank_account",
+          "passport",
+        ],
+        allowedFields: [
+          "droneId",
+          "model",
+          "status",
+          "location",
+          "altitudeMeters",
+          "speedMps",
+          "owner",
+          "privacyLevel",
+          "batteryLevel",
+          "flightDuration",
+          "purpose",
+        ],
+        isAllowedQueries: [
+          "drone status",
+          "active drones",
+          "battery level",
+          "location",
+          "flight duration",
+        ],
         updatedAt: new Date(),
-        createdAt: new Date()
+        createdAt: new Date(),
       };
 
       return NextResponse.json({ settings: defaultSettings });
     }
 
     return NextResponse.json({ settings });
-
   } catch (error) {
     console.error("Failed to fetch user settings:", error);
     return NextResponse.json(
       { error: "Failed to fetch user settings" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -77,10 +98,7 @@ export async function PATCH(request: Request) {
     // Get Auth0 session
     const session = await auth0.getSession();
     if (!session || !session.user?.sub) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const userId = session.user.sub as string;
@@ -90,10 +108,14 @@ export async function PATCH(request: Request) {
     const { highRiskPII, allowedFields, isAllowedQueries } = body;
 
     // Validate input
-    if (!Array.isArray(highRiskPII) || !Array.isArray(allowedFields) || !Array.isArray(isAllowedQueries)) {
+    if (
+      !Array.isArray(highRiskPII) ||
+      !Array.isArray(allowedFields) ||
+      !Array.isArray(isAllowedQueries)
+    ) {
       return NextResponse.json(
         { error: "All fields must be arrays" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -108,30 +130,29 @@ export async function PATCH(request: Request) {
       highRiskPII,
       allowedFields,
       isAllowedQueries,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
     const result = await settingsCollection.updateOne(
       { userId },
-      { 
+      {
         $set: updateData,
-        $setOnInsert: { createdAt: new Date() }
+        $setOnInsert: { createdAt: new Date() },
       },
-      { upsert: true }
+      { upsert: true },
     );
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       message: "Settings updated successfully",
       updated: result.modifiedCount > 0,
-      created: result.upsertedCount > 0
+      created: result.upsertedCount > 0,
     });
-
   } catch (error) {
     console.error("Failed to update user settings:", error);
     return NextResponse.json(
       { error: "Failed to update user settings" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

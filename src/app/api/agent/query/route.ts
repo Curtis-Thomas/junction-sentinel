@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import * as auditLogger from "../../../lib/auditlogger";
-import { auth0 } from  "@/app/lib/auth0"; 
+import { auth0 } from "@/app/lib/auth0";
 import { MongoClient } from "mongodb";
 
- interface UserDoc {
+interface UserDoc {
   _id?: string;
   sub: string;
   email?: string;
@@ -38,9 +38,9 @@ export async function POST(request: Request) {
     request.headers.get("x-real-ip") ||
     "unknown";
 
-     try {
+  try {
     // ✅ Get Auth0 session
-    const auth0User = await auth0.getSession()
+    const auth0User = await auth0.getSession();
     if (auth0User?.sub) {
       userId = auth0User.sub as string; // Set userId to Auth0 sub
 
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
       await usersCollection.updateOne(
         { sub: auth0User.sub },
         { $set: userDoc, $setOnInsert: { createdAt: new Date() } },
-        { upsert: true }
+        { upsert: true },
       );
     }
 
@@ -83,10 +83,9 @@ export async function POST(request: Request) {
 
       return NextResponse.json(
         { status: "error", message: "user_input is required", auditId },
-        { status: 400 }
+        { status: 400 },
       );
     }
-
 
     // Step 1: Call Agent 1
     const agent1Res = await fetch(
