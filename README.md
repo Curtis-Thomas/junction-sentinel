@@ -72,9 +72,12 @@ The architecture is composed of **modular, cooperative agents**. This design ens
 ### API Endpoints
 
 ```http
-POST /api/agent/1       → Intent & compliance checks
-POST /api/agent/2       → Data handler & synthesis
-POST /api/agent/query  → End-to-end query workflow
+POST /api/agent/1         → Intent & compliance checks
+POST /api/agent/2         → Data handler & synthesis
+POST /api/agent/query     → End-to-end query workflow
+GET /api/agent/audit-logs → Fetch audit logs
+GET /api/userSetting      → Get user settings
+PATCH /api/userSetting    → Update user settings
 ```
 
 ## Technology Stack
