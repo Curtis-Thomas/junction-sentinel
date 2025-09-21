@@ -30,28 +30,6 @@ It enables **real-time, privacy-preserving queries** on sensitive data with safe
 
 The architecture is composed of **modular, cooperative agents**. This design ensures resilience, explainability, and transparency, compared to a monolithic system.
 
-### Key Agents
-
-1. **Query Interpreter**
-   - Analyzes user intent from natural language input.
-   - Rejects disallowed or non-compliant queries.
-
-2. **Compliance Checker**
-   - Enforces GDPR and NATO Data Strategy guardrails.
-   - Blocks risky queries before execution.
-
-3. **Data Transformer**
-   - Applies anonymization, summarization, or pseudonymization.
-   - Ensures strict data minimization.
-
-4. **LLM + RAG Engine**
-   - Uses Google Gemini with Retrieval-Augmented Generation for context.
-   - Secured with Prompt Sanitization and Differential Privacy.
-
-5. **Response & Audit Layer**
-   - Returns clear responses.
-   - Maintains a full audit trail of all data handling.
-
 ---
 
 ## Agent Workflows
