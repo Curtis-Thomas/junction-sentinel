@@ -1,14 +1,22 @@
 "use client";
-import { loginUrl } from "./utils/miscellaneous";
+
+import { useEffect } from "react";
+import { HeroSection, Navigation } from "@/components";
+import { useUser } from "@auth0/nextjs-auth0";
 
 export default function Home() {
-  return (
-    <>
-      <>Junction boxers</>
+  const { user } = useUser();
 
-      <a href={loginUrl}>
-        <button type="button">Login</button>
-      </a>
-    </>
+  useEffect(() => {
+    if (user) {
+      window.location.href = "/dashboard";
+    }
+  }, [user]);
+
+  return (
+    <main>
+      <Navigation />
+      <HeroSection />
+    </main>
   );
 }

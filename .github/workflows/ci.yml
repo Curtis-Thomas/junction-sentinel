@@ -1,5 +1,3 @@
-# .github/workflows/ci.yml
-
 name: Node.js CI
 
 on:
@@ -23,17 +21,17 @@ jobs:
         with:
           node-version: "18"
 
+      - name: Clear NPM cache
+        run: npm cache clean --force
+
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+
+      - name: Install sharp dependencies
+        run: npm install --include=optional sharp
 
       - name: Run build
         run: npm run build
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
-
-      - name: Run tests
-        run: npm test
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}

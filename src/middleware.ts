@@ -35,13 +35,6 @@ const apiLimiter = rateLimit(1 * 60 * 1000, 1000);
 export async function middleware(request: NextRequest) {
   console.log(`Incoming request: ${request.method} ${request.url}`);
 
-  // ** IMPORTANT FIX: Exclude the file upload route from middleware processing **
-  if (request.nextUrl.pathname.startsWith("/api/upload-dicom")) {
-    // Return a direct response here to let the request pass through
-    // without the middleware consuming the body.
-    return NextResponse.next();
-  }
-
   // Now, the rest of your middleware logic can run for other routes
   const rateLimitResponse = apiLimiter(request);
   if (rateLimitResponse) {
