@@ -26,6 +26,7 @@ async function connectToMongo() {
   await mongoClient.connect();
   return mongoClient;
 }
+
 export async function POST(request: Request) {
   const auditId = `audit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   const startTime = new Date();
@@ -39,29 +40,30 @@ export async function POST(request: Request) {
     "unknown";
 
   try {
-    // ✅ Get Auth0 session
     const auth0User = await auth0.getSession();
-    if (auth0User?.sub) {
-      userId = auth0User.sub as string; // Set userId to Auth0 sub
+    userId = auth0User?.user?.sub || null; // ✅ Assign userId here
 
-      // ✅ Save/update user in MongoDB users collection
+    if (userId) {
+      console.log("started user upsert");
       const client = await connectToMongo();
       const db = client.db("junction-boxers");
       const usersCollection = db.collection("users");
 
-      const userDoc: UserDoc = {
-        sub: auth0User.sub as string,
-        email: auth0User.email as string | undefined,
-        name: auth0User.name as string | undefined,
-        picture: auth0User.picture as string | undefined,
+      const userDoc = {
+        sub: userId,
+        email: auth0User?.user?.email as string | undefined,
+        name: auth0User?.user?.name as string | undefined,
+        picture: auth0User?.user?.picture as string | undefined,
         lastLogin: new Date(),
       };
+      console.log("Upserting user document:", userDoc);
 
       await usersCollection.updateOne(
-        { sub: auth0User.sub },
+        { sub: userId },
         { $set: userDoc, $setOnInsert: { createdAt: new Date() } },
         { upsert: true },
       );
+      console.log("User document upserted successfully.");
     }
 
     const body = await request.json();
@@ -80,20 +82,19 @@ export async function POST(request: Request) {
         error: "user_input is required",
         processingTime: Date.now() - startTime.getTime(),
       });
-
       return NextResponse.json(
         { status: "error", message: "user_input is required", auditId },
         { status: 400 },
       );
     }
 
-    // Step 1: Call Agent 1
+    // ✅ Step 1: Call Agent 1 and pass the userId in the body
     const agent1Res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/agent/1`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_input: userInput }),
+        body: JSON.stringify({ user_input: userInput, userId: userId }),
       },
     );
 
@@ -110,7 +111,6 @@ export async function POST(request: Request) {
         error: `Agent 1 responded with ${agent1Res.status}`,
         processingTime: Date.now() - startTime.getTime(),
       });
-
       return NextResponse.json(
         { status: "error", message: "Agent 1 processing failed", auditId },
         { status: agent1Res.status },
@@ -133,7 +133,6 @@ export async function POST(request: Request) {
         finalResponse: agent1Result.reason,
         processingTime: Date.now() - startTime.getTime(),
       });
-
       return NextResponse.json(
         { status: "error", message: agent1Result.reason, auditId },
         { status: 403 },
@@ -164,7 +163,6 @@ export async function POST(request: Request) {
         error: `Agent 2 responded with ${agent2Res.status}`,
         processingTime: Date.now() - startTime.getTime(),
       });
-
       return NextResponse.json(
         { status: "error", message: "Agent 2 processing failed", auditId },
         { status: agent2Res.status },
@@ -173,7 +171,6 @@ export async function POST(request: Request) {
 
     const agent2Result = await agent2Res.json();
 
-    // Log success
     await auditLogger.logAudit({
       auditId,
       userId,
@@ -189,7 +186,6 @@ export async function POST(request: Request) {
       transparency: agent2Result.transparency,
       processingTime: Date.now() - startTime.getTime(),
     });
-
     return NextResponse.json({
       status: "success",
       message: agent2Result.finalResponse,
@@ -198,7 +194,6 @@ export async function POST(request: Request) {
     });
   } catch (error: unknown) {
     console.error("Integration endpoint error:", error);
-
     await auditLogger.logAudit({
       auditId,
       userId,
@@ -211,7 +206,6 @@ export async function POST(request: Request) {
       error: error instanceof Error ? error.message : String(error),
       processingTime: Date.now() - startTime.getTime(),
     });
-
     return NextResponse.json(
       { status: "error", message: "Internal server error", auditId },
       { status: 500 },

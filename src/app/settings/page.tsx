@@ -1,5 +1,5 @@
 "use client";
-
+//ignore typescrip
 import * as React from "react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -107,98 +107,186 @@ const junctionSentinelTheme = createTheme({
 });
 
 function SettingsPage() {
-  // Default values for the settings
-  const defaultHighRiskPII =
-    "firstName, lastName, email, licenseNumber, phone, pilot info";
-  const defaultAllowedFields =
-    "droneId, model, status, location, altitudeMeters, speedMps, owner, privacyLevel, batteryLevel, flightDuration, purpose, average, count, total, active, inactive, coordinates, latitude, longitude, battery, speed, altitude";
-  const defaultDisallowedQueries =
-    "What is Alex Chen's email?, Tell me the license number for pilot P-101.";
-
   const [highRiskPII, setHighRiskPII] = React.useState("");
   const [allowedFields, setAllowedFields] = React.useState("");
-  const [disallowedQueries, setDisallowedQueries] = React.useState("");
+  const [allowedQueries, setAllowedQueries] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [isPageLoading, setIsPageLoading] = React.useState(true);
   const [alert, setAlert] = React.useState<{
     type: "success" | "error" | null;
     message: string | null;
-  }>({ type: null, message: null });
+  }>({ type: null, message: null }); // Default values for the settings
 
-  React.useEffect(() => {
-    // Mock API call
-    const fetchSettings = async () => {
-      // Simulate network delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      try {
-        // In a real app, this would be an actual fetch call
-        const responseData = {
-          highRiskPII: ["firstName", "lastName", "email", "phone"],
-          allowedFields: ["droneId", "model", "status", "location", "battery"],
-          disallowedQueries: ["show me all", "what is..."],
-        };
-
-        setHighRiskPII(responseData.highRiskPII.join(", "));
-        setAllowedFields(responseData.allowedFields.join(", "));
-        setDisallowedQueries(responseData.disallowedQueries.join(", "));
-        setAlert({ type: null, message: null });
-      } catch (error) {
-        console.error("Error fetching settings:", error);
-        setAlert({
-          type: "error",
-          message: "Failed to load settings. Please try refreshing the page.",
-        });
-      } finally {
-        setIsPageLoading(false);
-      }
-    };
-    fetchSettings();
-  }, []);
+  const defaultSettings = React.useMemo(
+    () => ({
+      highRiskPII: [
+        "firstName",
+        "lastName",
+        "email",
+        "licenseNumber",
+        "phone",
+        "pilot info",
+      ],
+      allowedFields: [
+        "droneId",
+        "model",
+        "status",
+        "location",
+        "altitudeMeters",
+        "speedMps",
+        "owner",
+        "privacyLevel",
+        "batteryLevel",
+        "flightDuration",
+        "purpose",
+        "average",
+        "count",
+        "total",
+        "active",
+        "inactive",
+        "coordinates",
+        "latitude",
+        "longitude",
+        "battery",
+        "speed",
+        "altitude",
+      ],
+      isAllowedQueries: [
+        "drone status",
+        "active drones",
+        "battery level",
+        "location",
+        "flight duration",
+      ],
+    }),
+    [],
+  );
 
   const parseStringToArray = (str: string) => {
     return str
-      .split(/["']?,\s*["']?/)
-      .map((s) => s.replace(/["']/g, "").trim())
+      .split(/,\s*/)
+      .map((s) => s.trim())
       .filter((s) => s !== "");
   };
 
-  const handleSaveSettings = async (settingsToSave: {
-    highRiskPII: string[];
-    allowedFields: string[];
-    disallowedQueries: string[];
-  }) => {
+  const fetchSettings = async () => {
+    setIsPageLoading(true);
+    try {
+      const response = await fetch("/api/userSetting", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+
+      const { highRiskPII, allowedFields, isAllowedQueries } =
+        responseData.settings;
+
+      setHighRiskPII(highRiskPII.join(", "));
+      setAllowedFields(allowedFields.join(", "));
+      setAllowedQueries(isAllowedQueries.join(", "));
+      setAlert({ type: null, message: null });
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+      setAlert({
+        type: "error",
+        message: "Failed to load settings. Please try refreshing the page.",
+      });
+    } finally {
+      setIsPageLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchSettings();
+  }, []); // Define a type for the API error response
+
+  type ErrorResponse = {
+    error: string;
+  }; // Updated function to handle saving settings
+
+  const handleSaveSettings = async () => {
     setIsLoading(true);
     setAlert({ type: null, message: null });
 
     try {
-      // Mock API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      const success = true; // Simulate a successful save
-      if (!success) {
-        throw new Error("Failed to save settings.");
+      const payload = {
+        highRiskPII: parseStringToArray(highRiskPII),
+        allowedFields: parseStringToArray(allowedFields),
+        isAllowedQueries: parseStringToArray(allowedQueries),
+      };
+
+      const response = await fetch("/api/userSetting", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData: ErrorResponse = await response.json();
+        throw new Error(errorData.error || "Failed to save settings.");
       }
 
       setAlert({ type: "success", message: "Settings saved successfully!" });
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error saving settings:", error);
+      let message = "Failed to save settings. Please try again.";
+      if (error instanceof Error) {
+        message = error.message;
+      }
       setAlert({
         type: "error",
-        message: "Failed to save settings. Please try again.",
+        message,
       });
     } finally {
       setIsLoading(false);
     }
-  };
+  }; // Updated function to handle resetting settings
 
-  const handleResetSettings = () => {
-    setHighRiskPII(defaultHighRiskPII);
-    setAllowedFields(defaultAllowedFields);
-    setDisallowedQueries(defaultDisallowedQueries);
-    handleSaveSettings({
-      highRiskPII: parseStringToArray(defaultHighRiskPII),
-      allowedFields: parseStringToArray(defaultAllowedFields),
-      disallowedQueries: parseStringToArray(defaultDisallowedQueries),
-    });
+  const handleResetSettings = async () => {
+    setAlert({ type: null, message: null });
+    setIsLoading(true);
+
+    try {
+      const payload = {
+        highRiskPII: defaultSettings.highRiskPII,
+        allowedFields: defaultSettings.allowedFields,
+        isAllowedQueries: defaultSettings.isAllowedQueries,
+      };
+
+      const response = await fetch("/api/userSetting", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData: ErrorResponse = await response.json();
+        throw new Error(errorData.error || "Failed to reset settings.");
+      } // Update local state with the new default values
+
+      setHighRiskPII(defaultSettings.highRiskPII.join(", "));
+      setAllowedFields(defaultSettings.allowedFields.join(", "));
+      setAllowedQueries(defaultSettings.isAllowedQueries.join(", "));
+
+      setAlert({ type: "success", message: "Settings reset to default!" });
+    } catch (error: unknown) {
+      console.error("Error resetting settings:", error);
+      let message = "Failed to reset settings. Please try again.";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      setAlert({
+        type: "error",
+        message,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -213,8 +301,6 @@ function SettingsPage() {
       >
         <CssBaseline />
         <DashHeader />
-
-        {/* Main Content Area */}
         <Box
           component="main"
           sx={{
@@ -270,7 +356,7 @@ function SettingsPage() {
                   minRows={2}
                   value={highRiskPII}
                   onChange={(e) => setHighRiskPII(e.target.value)}
-                  placeholder={defaultHighRiskPII}
+                  placeholder={defaultSettings.highRiskPII.join(", ")}
                   sx={{ mb: 3 }}
                 />
 
@@ -282,21 +368,22 @@ function SettingsPage() {
                   minRows={3}
                   value={allowedFields}
                   onChange={(e) => setAllowedFields(e.target.value)}
-                  placeholder={defaultAllowedFields}
+                  placeholder={defaultSettings.allowedFields.join(", ")}
                   sx={{ mb: 3 }}
                 />
 
                 <TextField
-                  id="disallowed-queries"
-                  label="Disallowed Query Examples (comma-separated)"
+                  id="allowed-queries"
+                  label="Allowed Query Examples (comma-separated)"
                   multiline
                   fullWidth
                   minRows={2}
-                  value={disallowedQueries}
-                  onChange={(e) => setDisallowedQueries(e.target.value)}
-                  placeholder={defaultDisallowedQueries}
+                  value={allowedQueries}
+                  onChange={(e) => setAllowedQueries(e.target.value)}
+                  placeholder={defaultSettings.isAllowedQueries.join(", ")}
                   sx={{ mb: 3 }}
                 />
+
                 <Box
                   sx={{
                     display: "flex",
@@ -317,14 +404,7 @@ function SettingsPage() {
                   </Button>
                   <Button
                     variant="contained"
-                    onClick={() =>
-                      handleSaveSettings({
-                        highRiskPII: parseStringToArray(highRiskPII),
-                        allowedFields: parseStringToArray(allowedFields),
-                        disallowedQueries:
-                          parseStringToArray(disallowedQueries),
-                      })
-                    }
+                    onClick={handleSaveSettings}
                     disabled={isLoading}
                     sx={{
                       flexGrow: 1,
