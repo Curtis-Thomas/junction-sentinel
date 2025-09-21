@@ -1,7 +1,8 @@
 "use client";
 
 import { Box, Button, Container, Typography } from "@mui/material";
-import landingBg from "../../public/landing_page_background.jpg";
+// NOTE: Remove the image import
+// import landingBg from "../../public/landing_page_background.jpg";
 import { loginUrl } from "../app/utils/miscellaneous";
 
 export default function HeroSection() {
@@ -13,7 +14,8 @@ export default function HeroSection() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundImage: `url(${landingBg.src})`, // replace with your bg
+        // Reference the image directly from the public directory
+        backgroundImage: `url('/landing_page_background.jpg')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         color: "#fff",
