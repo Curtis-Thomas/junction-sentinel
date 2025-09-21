@@ -113,7 +113,7 @@ const junctionSentinelTheme = createTheme({
 });
 
 export default function ResponsiveDrawer() {
-  const [input, setInput] = React.useState("");
+  const [input, setInput] = React.useState("test"); // 👈 Changed initial state
   const [output, setOutput] = React.useState("Waiting for input...");
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
@@ -161,6 +161,11 @@ export default function ResponsiveDrawer() {
     }
   };
 
+  // ✅ Add this useEffect hook to call the function on component mount
+  React.useEffect(() => {
+    handleSendRequest();
+  }, []); // The empty array makes it run only once on the initial load
+
   const allowedFields = [
     "droneId",
     "model",
@@ -187,10 +192,7 @@ export default function ResponsiveDrawer() {
     <ThemeProvider theme={junctionSentinelTheme}>
       <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         <CssBaseline />
-
         <DashHeader />
-
-        {/* Main Content */}
         <Box
           component="main"
           sx={{
@@ -216,8 +218,6 @@ export default function ResponsiveDrawer() {
               will find the answer while ensuring all queries are compliant and
               privacy-preserving.
             </Typography>
-
-            {/* Allowed and Disallowed Fields Lists */}
             <Typography variant="h6" sx={{ mb: 1 }}>
               Allowed Fields
             </Typography>
@@ -236,7 +236,7 @@ export default function ResponsiveDrawer() {
                   sx={{
                     p: 0.5,
                     borderRadius: 1,
-                    bgcolor: "rgba(66, 165, 245, 0.2)", // Using a light blue for contrast
+                    bgcolor: "rgba(66, 165, 245, 0.2)",
                     color: "text.primary",
                   }}
                 >
@@ -279,15 +279,12 @@ export default function ResponsiveDrawer() {
                 </Paper>
               ))}
             </Box>
-
-            {/* Error Banner */}
             {isError && (
               <Alert severity="error" sx={{ mb: 2 }}>
                 There was an issue with your query. Please adjust and try again.
               </Alert>
             )}
 
-            {/* Response Output */}
             <Typography variant="h6" sx={{ mb: 1 }}>
               Response
             </Typography>
@@ -310,7 +307,6 @@ export default function ResponsiveDrawer() {
               </Typography>
             </Paper>
 
-            {/* Input + Send Button */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
               <TextField
                 fullWidth
