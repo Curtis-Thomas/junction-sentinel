@@ -1,5 +1,6 @@
 # Stage 1: Builder
-FROM node:18-alpine AS builder
+# Use a Debian-based image for compatibility with sharp
+FROM node:18 AS builder
 
 WORKDIR /app
 
@@ -14,7 +15,8 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Runner
-FROM node:18-alpine AS runner
+# Use a slimmed-down Debian-based image for the final container
+FROM node:18-slim AS runner
 
 WORKDIR /app
 
@@ -27,6 +29,9 @@ COPY --from=builder /app/package.json ./package.json
 # Set environment variables for Next.js to run in a container
 ENV HOST 0.0.0.0
 ENV PORT 3000
+
+# Next.js telemetry is annoying in a Docker build environment
+ENV NEXT_TELEMETRY_DISABLED 1
 
 # Expose the port
 EXPOSE 3000
