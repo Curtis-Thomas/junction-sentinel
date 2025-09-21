@@ -136,8 +136,8 @@ Follow these steps to run the Junction Sentinel prototype locally.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Curtis-Thomas/oulues-hackahton-junction-boxers.git
-cd oulues-hackahton-junction-boxers
+git clone https://github.com/Curtis-Thomas/junction-sentinel.git
+cd junction-sentinel
 ```
 
 ### 2. Install Dependencies
