@@ -1,6 +1,31 @@
 import { NextResponse } from "next/server";
 import * as auditLogger from "../../../lib/auditlogger";
+import { auth0 } from  "@/app/lib/auth0"; 
+import { MongoClient } from "mongodb";
 
+ interface UserDoc {
+  _id?: string;
+  sub: string;
+  email?: string;
+  name?: string;
+  picture?: string;
+  lastLogin: Date;
+}
+
+let mongoClient: MongoClient | null = null;
+
+async function connectToMongo() {
+  if (mongoClient) {
+    return mongoClient;
+  }
+  const { MongoClient } = await import("mongodb");
+  const uri = process.env.MONGODB_URI;
+  if (!uri) throw new Error("MONGODB_URI is not defined");
+
+  mongoClient = new MongoClient(uri);
+  await mongoClient.connect();
+  return mongoClient;
+}
 export async function POST(request: Request) {
   const auditId = `audit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   const startTime = new Date();
@@ -13,10 +38,34 @@ export async function POST(request: Request) {
     request.headers.get("x-real-ip") ||
     "unknown";
 
-  try {
+     try {
+    // ✅ Get Auth0 session
+    const auth0User = await auth0.getSession()
+    if (auth0User?.sub) {
+      userId = auth0User.sub as string; // Set userId to Auth0 sub
+
+      // ✅ Save/update user in MongoDB users collection
+      const client = await connectToMongo();
+      const db = client.db("junction-boxers");
+      const usersCollection = db.collection("users");
+
+      const userDoc: UserDoc = {
+        sub: auth0User.sub as string,
+        email: auth0User.email as string | undefined,
+        name: auth0User.name as string | undefined,
+        picture: auth0User.picture as string | undefined,
+        lastLogin: new Date(),
+      };
+
+      await usersCollection.updateOne(
+        { sub: auth0User.sub },
+        { $set: userDoc, $setOnInsert: { createdAt: new Date() } },
+        { upsert: true }
+      );
+    }
+
     const body = await request.json();
     userInput = body.user_input;
-    userId = body.user_id ?? null;
 
     if (!userInput) {
       await auditLogger.logAudit({
@@ -34,9 +83,10 @@ export async function POST(request: Request) {
 
       return NextResponse.json(
         { status: "error", message: "user_input is required", auditId },
-        { status: 400 },
+        { status: 400 }
       );
     }
+
 
     // Step 1: Call Agent 1
     const agent1Res = await fetch(
