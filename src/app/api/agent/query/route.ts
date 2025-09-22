@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import * as auditLogger from "../../../lib/auditlogger";
 import { auth0 } from "@/app/lib/auth0";
 import { MongoClient } from "mongodb";
+import { config } from "@/config";
 
 interface UserDoc {
   _id?: string;
@@ -19,7 +20,7 @@ async function connectToMongo() {
     return mongoClient;
   }
   const { MongoClient } = await import("mongodb");
-  const uri = process.env.MONGODB_URI;
+  const uri = config.MONGODB_URI;
   if (!uri) throw new Error("MONGODB_URI is not defined");
 
   mongoClient = new MongoClient(uri);
@@ -90,7 +91,7 @@ export async function POST(request: Request) {
 
     // ✅ Step 1: Call Agent 1 and pass the userId in the body
     const agent1Res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/agent/1`,
+      `${config.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/agent/1`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -141,7 +142,7 @@ export async function POST(request: Request) {
 
     // Step 2: Call Agent 2
     const agent2Res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/agent/2`,
+      `${config.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/agent/2`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

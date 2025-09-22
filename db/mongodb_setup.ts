@@ -2,6 +2,7 @@
 import { MongoClient } from "mongodb";
 import fs from "fs";
 import path from "path";
+import { config } from "@/config";
 
 // Load environment variables
 import dotenv from "dotenv";
@@ -12,7 +13,7 @@ const testDataPath = path.join(__dirname, "../test.json");
 const droneTestData = JSON.parse(fs.readFileSync(testDataPath, "utf8"));
 
 async function setupDatabase() {
-  const uri = process.env.MONGODB_URI;
+  const uri = config.MONGODB_URI;
   if (!uri) {
     console.error("MONGODB_URI environment variable is not set.");
     process.exit(1); // Exit the process with an error code

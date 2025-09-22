@@ -2,10 +2,10 @@
 import { NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { MongoClient } from "mongodb";
-
+import { config } from "@/config";
 // --- Environment Variables & Constants ---
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const MONGODB_URI = process.env.MONGODB_URI;
+const GEMINI_API_KEY = config.GEMINI_API_KEY;
+const MONGODB_URI = config.MONGODB_URI;
 
 // Check for the API key to prevent runtime errors
 if (!GEMINI_API_KEY) {

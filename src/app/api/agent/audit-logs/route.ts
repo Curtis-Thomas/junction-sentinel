@@ -1,11 +1,12 @@
 // src/app/api/audit-logs/route.ts
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
+import { config } from "@/config";
 
 export async function GET() {
   let client;
   try {
-    const uri = process.env.MONGODB_URI;
+    const uri = config.MONGODB_URI;
     if (!uri) {
       return NextResponse.json(
         { error: "Database connection string not configured" },
