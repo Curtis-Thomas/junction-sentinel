@@ -42,6 +42,7 @@ export async function POST(request: Request) {
   try {
     const auth0User = await auth0.getSession();
     userId = auth0User?.user?.sub || null; // ✅ Assign userId here
+    console.log(userId);
 
     if (userId) {
       console.log("started user upsert");
