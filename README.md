@@ -80,14 +80,16 @@ PATCH /api/userSetting    → Update user settings
 Each authenticated user can configure three key privacy parameters:
 
 #### 1. High-Risk PII Categories (`highRiskPII`)
+
 Defines what constitutes personally identifiable information that should be protected:
 
 #### 2. Allowed Data Fields (`allowedFields`)
+
 Specifies which drone data fields can be accessed in queries:
 
 #### 3. Allowed Query Types (`isAllowedQueries`)
-Defines the types of queries that are permitted:
 
+Defines the types of queries that are permitted:
 
 ### Dynamic Prompt Generation
 
@@ -105,6 +107,7 @@ When a user submits a query, the system:
 3. **Audit Trail**: All setting changes are logged for compliance
 4. **Granular Control**: Fine-grained control over data access
 5. **Dynamic Enforcement**: AI prompts adapt immediately to new settings
+
 ---
 
 ## Quickstart Guide
