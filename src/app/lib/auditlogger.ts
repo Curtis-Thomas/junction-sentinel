@@ -1,5 +1,6 @@
 // src/lib/auditLogger.ts
 import { MongoClient } from "mongodb";
+import { config } from "@/config";
 
 interface AuditLog {
   logId: string;
@@ -39,7 +40,7 @@ async function connectToDatabase(): Promise<MongoClient> {
     }
   }
 
-  const uri = process.env.MONGODB_URI;
+  const uri = config.MONGODB_URI;
   if (!uri) throw new Error("MONGODB_URI is not defined");
 
   cachedClient = new MongoClient(uri);

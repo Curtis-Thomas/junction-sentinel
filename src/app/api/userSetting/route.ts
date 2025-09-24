@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth0 } from "@/app/lib/auth0";
 import { MongoClient } from "mongodb";
+import { config } from "@/config";
 
 interface UserSettings {
   userId: string;
@@ -18,7 +19,7 @@ async function connectToMongo() {
     return mongoClient;
   }
   const { MongoClient } = await import("mongodb");
-  const uri = process.env.MONGODB_URI;
+  const uri = config.MONGODB_URI;
   if (!uri) throw new Error("MONGODB_URI is not defined");
 
   mongoClient = new MongoClient(uri);
